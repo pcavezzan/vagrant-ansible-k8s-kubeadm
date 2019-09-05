@@ -1,0 +1,37 @@
+- name: "Check if Kubernetes has already been initialized."
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: kubernetes_init_stat
+
+- name: "Creating kubernetes config directory (/etc/kubernetes)."
+  become: yes
+  file:
+    path: /etc/kubernetes
+    state: directory
+  when: not kubernetes_init_stat.stat.exists
+
+- name: "Uploading kubeadm-config.yaml"
+  become: yes
+  copy:
+    src: kubeadm-config.yaml
+    dest: /etc/kubernetes
+  when: not kubernetes_init_stat.stat.exists
+
+- name: "Install controle plane via kubeadm"
+  become: yes
+  command: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml
+  register: kubeadmin_init
+  when: not kubernetes_init_stat.stat.exists
+
+- name: "Print the init output to screen."
+  debug:
+    var: kubeadmin_init.stdout
+    verbosity: 2
+  when: kubeadmin_init
+
+- name: "Download the admin credentials."
+  become: yes
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: ./admin-local-cluster.yaml
+    flat: yes

@@ -1,0 +1,6 @@
+.vagrant/
+.DS_Store
+*.log
+**/ssh.config
+**/admin-local-cluster.yaml
+**/env.sh

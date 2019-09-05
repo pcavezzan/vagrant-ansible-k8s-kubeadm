@@ -1,0 +1,5 @@
+- name: "kubeadm join control-plane"
+  become: yes
+  command: "{{ kubernetes_join_command }}"
+  args:
+    creates: /etc/kubernetes/kubelet.conf

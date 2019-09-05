@@ -1,0 +1,33 @@
+- name: "Prepare all cluster VMs."
+  hosts: all
+  become: yes
+  vars:
+    distrib: bionic
+    kubeadm:
+      requirements:
+        ip_address: "{{ hostvars[inventory_hostname]['ansible_enp0s8']['ipv4']['address'] }}"
+  roles:
+  - "kubeadm.requirements"
+
+- name: "Install control plane"
+  hosts: cpl
+  roles:
+  - "kubeadm.controlplane"
+  tasks:
+  - name: "Get the kubeadm join command from the Kubernetes master."
+    become: true
+    command: kubeadm token create --print-join-command
+    changed_when: false
+    register: kubernetes_join_command_result
+  - name: "Set fact kubeadm_join_command globally."
+    set_fact:
+      kubernetes_join_command: "{{ kubernetes_join_command_result.stdout }}"
+    when: kubernetes_join_command_result.stdout is defined
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    with_items: "{{ groups['worker'] }}"
+
+- name: "Install worker nodes"
+  hosts: worker
+  roles:
+  - "kubeadm.node"

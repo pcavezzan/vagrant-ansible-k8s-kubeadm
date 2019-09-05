@@ -1,0 +1,59 @@
+- name: "Add Docker’s official GPG key"
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+
+
+- name: "Add Docker apt repository"
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ distrib }} stable
+    update_cache: yes
+
+- name: "Install docker ce"
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'docker-ce=18.06.2~ce~3-0~ubuntu']
+
+- name: "Setup daemon"
+  copy:
+    src: docker
+    dest: /etc/docker
+
+- name: "Creating systemd docker configuration folder for extra configuration if necessary"
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+- name: "Restart docker service"
+  systemd:
+    daemon_reload: yes
+    name: docker
+    state: restarted
+
+- name: "Add Kubernetes’s official GPG key"
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+
+- name: "Add Kubernetes apt repository"
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    update_cache: yes
+
+- name: "Install kubelet, kubeadm and kubectl"
+  apt:
+    name: ['kubelet', 'kubeadm', 'kubectl']
+    
+
+- name: "Lock version kubelet & kubeadm & kubectl"
+  command: apt-mark hold kubelet kubeadm kubectl
+
+- name: "Configure kubelet to network interface enp0s8"
+  lineinfile:
+    path: /etc/default/kubelet
+    line: "KUBELET_EXTRA_ARGS=--node-ip={{ kubeadm.requirements.ip_address }}"
+    create: yes
+
+- name: "Restart kubelet service"
+  systemd:
+    daemon_reload: yes
+    name: kubelet
+    state: restarted
