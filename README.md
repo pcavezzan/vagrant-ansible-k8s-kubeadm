@@ -33,6 +33,8 @@ $ ansible> ansible-playbook install.yml
 $ ansible> kubectl --kubeconfig=admin-local-cluster.yaml get node -o wide
 ```
 
+:interrobang: Do not worry if "TASK [kubeadm.requirements : Add Docker apt repository]" takes time. For some reason, it can take up to 3/5 minutes to complete sometimes :innocent:
+
 ## Install addons (networkplugin/calico, heapster, metric-server, dashboard)
 
 ```bash
@@ -70,3 +72,7 @@ EOF
 
 * [Official installation guide for a single master kubernetes with kubeadm](https://kubernetes.io/fr/docs/setup/independent/create-cluster-kubeadm/)
 * [Ansible Role - Kubernetes](https://galaxy.ansible.com/geerlingguy/kubernetes)
+* [Kubernetes Dashboard](https://github.com/kubernetes/dashboard/)
+* [Kubernetes Heapster](https://github.com/kubernetes-retired/heapster)
+* [Kubernetes Metrics Server](https://github.com/kubernetes-incubator/metrics-server)
+* [Project Calico](https://www.projectcalico.org/)
