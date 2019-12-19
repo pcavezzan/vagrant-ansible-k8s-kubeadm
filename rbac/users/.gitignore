@@ -1,0 +1,6 @@
+csr.yaml
+*.key
+*.csr
+*.cert
+*.crt
+*.pem

@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rbd-example
+  namespace: formation
+  annotations:
+    formation: "true"
+    exemple: "rbac"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: example
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: dev

@@ -1,3 +1,5 @@
+## V1.x && k8s <= 1.15.x
+
 $> kubectl proxy
 
 Now access Dashboard at:
@@ -5,6 +7,13 @@ Now access Dashboard at:
 http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login
 
+
+## V2.x && k8s >= 1.16.x
+
+
+$> kubectl proxy 
+
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 
 Resources: 
   https://github.com/kubernetes/dashboard

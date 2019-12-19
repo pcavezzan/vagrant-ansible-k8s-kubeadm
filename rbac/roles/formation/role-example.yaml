@@ -1,0 +1,59 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: example
+  namespace: formation
+  annotations:
+    formation: "true"
+    exemple: "rbac"
+rules:
+- apiGroups:
+  - ""
+  - "apps"
+  - "batch"
+  - "autoscaling"
+    #- "batch/v1beta1"
+    # - "batch/v1"
+  resources:
+  - pods
+  - pods/exec
+  - services
+  - ingresses
+  - endpoints
+  - replicasets
+  - deployments
+  - statefulsets
+  - daemonsets
+  - cronjobs
+  - jobs
+  - persistentvolumeclaims
+  - configmaps
+  - horizontalpodautoscalers 
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - pods/log
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - ""
+  - "extensions"
+  resources:
+  - event
+  - deployments
+  - replicasets
+  - replicationcontrollers
+  verbs:
+  - get
+  - list
+  - watch
+
