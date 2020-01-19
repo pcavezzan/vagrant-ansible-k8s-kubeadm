@@ -1,0 +1,3 @@
+kubernetes_release: 1.16.2
+kubernetes_version: "v{{ kubernetes_release }}"
+kubernetes_package_version: "{{ kubernetes_release }}-00"
